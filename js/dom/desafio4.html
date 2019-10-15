@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<meta http-equiv="X-UA-Compatible" content="ie=edge">
+	<title>Desafio 3 - DOM</title>
+</head>
+
+<body>
+	<div id="app">
+        <input type="text" name="nome"><button onClick="adicionar()">Adicionar</button>
+	</div>
+	<script>
+		var nomes = ["Diego", "Gabriel", "Lucas"];
+        const list = document.createElement('ul');
+        for (const nome of nomes) {
+            let listItem = document.createElement('li');
+            let textItem = document.createTextNode(nome);
+            listItem.appendChild(textItem);
+            list.appendChild(listItem);
+        }
+		document.getElementById('app').appendChild(list);
+
+        function adicionar(){
+            let input = document.getElementsByName('nome')[0];
+            let listItem = document.createElement('li');
+            let textItem = document.createTextNode(input.value);
+            input.value = '';
+            listItem.appendChild(textItem);
+            list.appendChild(listItem);
+
+        }
+
+	</script>
+</body>
+
+</html>
