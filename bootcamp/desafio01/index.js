@@ -51,8 +51,7 @@ server.get('/projects/:id',(req,res) => {
 });
 
 const getByIndex = (id) => {
-    const index = projetos.findIndex(projeto => projeto.id==id);
-    return projetos[index];
+    return projetos[getIndex(id)];
 }
 const getIndex = (id) => {
     return projetos.findIndex(projeto => projeto.id==id)
