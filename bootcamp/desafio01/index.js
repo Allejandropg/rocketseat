@@ -64,9 +64,9 @@ server.delete('/projects/:id', checkProjetoInArray,(req, res) =>{
 //cadastra uma task pelo id do projeto
 server.post('/projects/:id/tasks', checkProjetoInArray,(req,res) => {
     const id = req.params.id;
-    const { task } = req.body;
+    const { title } = req.body;
     const projeto = getByIndex(id);
-    projeto.tasks.push(task)
+    projeto.tasks.push(title)
     return res.send();
 });
 
