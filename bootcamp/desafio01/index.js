@@ -5,22 +5,16 @@ const express = require('express');
 const server = express();
 server.use(express.json());
 const projects = [];
+let count = 0;
 
 //list all projects
-server.get('/projects',(req,res) => {
+server.get('/projects', countRequests, (req,res) => {
     return res.json(projects);
 });
 
 //Middlewares
-function checkProjectExists(req, res, next){
-    let { id, title } = req.body;
-    if(!id){
-        id = req.params;
-    }
-    console.log(id, title)
-    if(!id || !title){
-        return res.status(400).json({erro:'Project not found on request body!'})
-    }
+function countRequests(req, res, next){
+    console.log(++count);
     return next();
 }
 
@@ -34,7 +28,7 @@ function checkProjectInArray(req, res, next){
 }
 
 //Add a project
-server.post('/projects', checkProjectExists,checkProjectExists, (req, res) => {
+server.post('/projects', countRequests, (req, res) => {
     const { id, title } = req.body;
     const project = {
         id, 
@@ -46,7 +40,7 @@ server.post('/projects', checkProjectExists,checkProjectExists, (req, res) => {
 });
 
 //Change a project based on id
-server.put('/projects/:id', checkProjectExists, checkProjectInArray,(req, res) =>{
+server.put('/projects/:id', countRequests,checkProjectInArray,(req, res) =>{
     const id = req.params.id;
     const title = req.body.title;
     const project = getByIndex(id);
@@ -55,7 +49,7 @@ server.put('/projects/:id', checkProjectExists, checkProjectInArray,(req, res) =
 });
 
 //Delete a project based on id
-server.delete('/projects/:id', checkProjectInArray,(req, res) =>{
+server.delete('/projects/:id', countRequests, checkProjectInArray,(req, res) =>{
     const id = req.params.id;
     const index = getIndex(id);
     projects.splice(index,1);
@@ -63,7 +57,7 @@ server.delete('/projects/:id', checkProjectInArray,(req, res) =>{
 });   
 
 //Add a task by project id
-server.post('/projects/:id/tasks', checkProjectInArray,(req,res) => {
+server.post('/projects/:id/tasks', countRequests, checkProjectInArray,(req,res) => {
     const id = req.params.id;
     const { title } = req.body;
     const project = getByIndex(id);
@@ -73,7 +67,7 @@ server.post('/projects/:id/tasks', checkProjectInArray,(req,res) => {
 
            
 //Select a project by id
-server.get('/projects/:id',(req,res) => {
+server.get('/projects/:id', countRequests, (req,res) => {
     const { id } = req.params;
     return res.json(getByIndex(id));
 });
