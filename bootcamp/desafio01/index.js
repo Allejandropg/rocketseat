@@ -10,36 +10,63 @@ const projetos = [];
 server.get('/projects',(req,res) => {
     return res.json(projetos);
 });
+//Middlewares
+function checkProjetoExists(req, res, next){
+    let { id, title } = req.body;
+    if(!id){
+        id = req.params;
+    }
+    console.log(id, title)
+    if(!id || !title){
+        return res.status(400).json({erro:'Project not found on request body!'})
+    }
+    return next();
+}
+
+function checkProjetoInArray(req, res, next){
+    const projeto = getByIndex(req.params.id);
+    if(!projeto){
+        return res.status(400).json({erro:'Project does exists!'})
+    }
+    req.projeto = projeto;
+    return next();
+}
 
 //cadastra um projeto
-server.post('/projects',(req, res) => {
-    const aux = req.body;
-    aux.tasks = [];
-    projetos.push(aux);
+server.post('/projects', checkProjetoExists,checkProjetoExists, (req, res) => {
+    const { id, title } = req.body;
+    const projeto = {
+        id, 
+        title,
+        tasks : []
+    };
+    projetos.push(projeto);
     return res.send();
 });
 
 //altera um projeto com base no id
-server.put('/projects/:id',(req, res) =>{
+server.put('/projects/:id', checkProjetoExists, checkProjetoInArray,(req, res) =>{
     const id = req.params.id;
     const title = req.body.title;
     const projeto = getByIndex(id);
     projeto.title = title;
-    return res.send();
+    return res.json(projeto);
 });
-//altera um projeto com base no id
-server.delete('/projects/:id',(req, res) =>{
+
+//deleta um projeto com base no id
+server.delete('/projects/:id', checkProjetoInArray,(req, res) =>{
     const id = req.params.id;
     const index = getIndex(id);
     projetos.splice(index,1);
     return res.send();
 });   
-//pega um projeto pelo id
-server.post('/projects/:id/tasks',(req,res) => {
+
+//cadastra uma task pelo id do projeto
+server.post('/projects/:id/tasks', checkProjetoInArray,(req,res) => {
     const id = req.params.id;
     const { task } = req.body;
     const projeto = getByIndex(id);
-    projeto.task.push(task)
+    projeto.tasks.push(task)
     return res.send();
 });
 
