@@ -4,14 +4,15 @@ const express = require('express');
 
 const server = express();
 server.use(express.json());
-const projetos = [];
+const projects = [];
 
-//listar todos os projetos
+//list all projects
 server.get('/projects',(req,res) => {
-    return res.json(projetos);
+    return res.json(projects);
 });
+
 //Middlewares
-function checkProjetoExists(req, res, next){
+function checkProjectExists(req, res, next){
     let { id, title } = req.body;
     if(!id){
         id = req.params;
@@ -23,64 +24,61 @@ function checkProjetoExists(req, res, next){
     return next();
 }
 
-function checkProjetoInArray(req, res, next){
-    const projeto = getByIndex(req.params.id);
-    if(!projeto){
+function checkProjectInArray(req, res, next){
+    const project = getByIndex(req.params.id);
+    if(!project){
         return res.status(400).json({erro:'Project does exists!'})
     }
-    req.projeto = projeto;
+    req.project = project;
     return next();
 }
 
-//cadastra um projeto
-server.post('/projects', checkProjetoExists,checkProjetoExists, (req, res) => {
+//Add a project
+server.post('/projects', checkProjectExists,checkProjectExists, (req, res) => {
     const { id, title } = req.body;
-    const projeto = {
+    const project = {
         id, 
         title,
         tasks : []
     };
-    projetos.push(projeto);
+    projects.push(project);
     return res.send();
 });
 
-//altera um projeto com base no id
-server.put('/projects/:id', checkProjetoExists, checkProjetoInArray,(req, res) =>{
+//Change a project based on id
+server.put('/projects/:id', checkProjectExists, checkProjectInArray,(req, res) =>{
     const id = req.params.id;
     const title = req.body.title;
-    const projeto = getByIndex(id);
-    projeto.title = title;
-    return res.json(projeto);
+    const project = getByIndex(id);
+    project.title = title;
+    return res.json(project);
 });
 
-//deleta um projeto com base no id
-server.delete('/projects/:id', checkProjetoInArray,(req, res) =>{
+//Delete a project based on id
+server.delete('/projects/:id', checkProjectInArray,(req, res) =>{
     const id = req.params.id;
     const index = getIndex(id);
-    projetos.splice(index,1);
+    projects.splice(index,1);
     return res.send();
 });   
 
-//cadastra uma task pelo id do projeto
-server.post('/projects/:id/tasks', checkProjetoInArray,(req,res) => {
+//Add a task by project id
+server.post('/projects/:id/tasks', checkProjectInArray,(req,res) => {
     const id = req.params.id;
     const { title } = req.body;
-    const projeto = getByIndex(id);
-    projeto.tasks.push(title)
+    const project = getByIndex(id);
+    project.tasks.push(title)
     return res.send();
 });
 
            
-//pega um projeto pelo id
+//Select a project by id
 server.get('/projects/:id',(req,res) => {
     const { id } = req.params;
     return res.json(getByIndex(id));
 });
 
-const getByIndex = (id) => {
-    return projetos[getIndex(id)];
-}
-const getIndex = (id) => {
-    return projetos.findIndex(projeto => projeto.id==id)
-}
+const getByIndex = (id) => projects[getIndex(id)];
+const getIndex = (id) => projects.findIndex(project => project.id==id);
+
 server.listen(3001);//localhost:3001
