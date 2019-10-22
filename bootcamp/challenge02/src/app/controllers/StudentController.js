@@ -26,7 +26,7 @@ class StudentController {
     }
 
     const { name, age, weight, height } = await Student.create(req.body);
-    return res.json({ name, age, weight, height });
+    return res.json({ name, email, age, weight, height });
   }
 
   async update(req, res) {
@@ -41,15 +41,26 @@ class StudentController {
     if (!(await schema.isValid(req.body))) {
       return res.status(401).json({ error: 'Validation fails' });
     }
+    const { id } = req.params;
 
-    const { email } = req.body;
-    const studentExists = await Student.findOne({ where: { email } });
-    if (studentExists) {
-      return res.status(401).json({ error: 'Student already exists.' });
+    const student = await Student.findByPk(id);
+    const emailNew = req.body.email;
+    if (emailNew && emailNew !== student.email) {
+      const studentExists = await Student.findOne({
+        where: { email: emailNew },
+      });
+      if (studentExists) {
+        return res.status(401).json({ error: 'Student already exists.' });
+      }
     }
+    const { name, email, age, weight, height } = await student.update(req.body);
 
-    const { name, age, weight, height } = await Student.create(req.body);
-    return res.json({ name, age, weight, height });
+    return res.json({ name, email, age, weight, height });
+  }
+
+  async read(req, res) {
+    const students = await Student.findAll();
+    return res.json(students);
   }
 }
 export default new StudentController();

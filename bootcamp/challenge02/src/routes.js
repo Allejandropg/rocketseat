@@ -10,9 +10,8 @@ const routes = new Router();
 routes.get('/', (req, res) => res.json({ success: 'Hello World' }));
 routes.post('/sessions', Sessioncontroller.store);
 routes.use(authMiddleware);
-routes.get('/students', (req, res) => {
-  return res.json({ success: 'Hello Student' });
-});
+routes.get('/students', authMiddleware, StudentController.read);
 routes.post('/students', authMiddleware, StudentController.store);
+routes.put('/students/:id', authMiddleware, StudentController.update);
 
 export default routes;
