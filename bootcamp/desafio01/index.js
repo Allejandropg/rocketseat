@@ -14,7 +14,7 @@ server.get('/projects', countRequests, (req,res) => {
 
 //Middlewares
 function countRequests(req, res, next){
-    console.log(`Total of requests`+(++count));
+    console.log(`Total of requests: `+(++count));
     return next();
 }
 
