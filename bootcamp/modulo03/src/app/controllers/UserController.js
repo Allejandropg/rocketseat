@@ -3,6 +3,11 @@ import User from '../models/User';
 
 class UserController {
   // Adiciona um novo usuário
+  async read(req, res) {
+    return res.json(await User.findAll());
+  }
+
+  // Adiciona um novo usuário
   async store(req, res) {
     const schema = Yup.object().shape({
       name: Yup.string().required(),
@@ -58,9 +63,9 @@ class UserController {
     if (oldPassword && !(await user.checkPassword(oldPassword))) {
       return res.status(401).json({ erro: 'Password does not match' });
     }
-    const { id, name, provider } = await user.update(req.body);
+    const { id, name, provider, avatar_id } = await user.update(req.body);
 
-    return res.json({ id, name, email, provider });
+    return res.json({ id, name, email, provider, avatar_id });
   }
 }
 export default new UserController();

@@ -1,9 +1,12 @@
 import Sequelize from 'sequelize'; // sequelize para conexão e manipulação do db
-import User from '../app/models/User'; // classe do usuario
-import File from '../app/models/File'; // classe do usuario
+// Models
+import User from '../app/models/User'; // model do usuario
+import File from '../app/models/File'; // model do File
+import Appointment from '../app/models/Appointment'; // model do Appointment
+// config
 import databaseConfig from '../config/database'; // configuração do db
 
-const models = [User, File]; // array para inicialização de models
+const models = [User, File, Appointment]; // array para inicialização de models
 
 class Database {
   constructor() {
@@ -12,7 +15,9 @@ class Database {
 
   init() {
     this.connection = new Sequelize(databaseConfig);
-    models.map(model => model.init(this.connection));
+    models
+      .map(model => model.init(this.connection))
+      .map(model => model.associate && model.associate(this.connection.models));
   }
 }
 
