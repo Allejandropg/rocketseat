@@ -2,23 +2,22 @@ import * as Yup from 'yup';
 import Student from '../models/Student';
 
 class StudentController {
-
   async index(req, res) {
     const students = await Student.findAll();
     return res.json(students);
   }
-  
+
   async store(req, res) {
     const schema = Yup.object().shape({
-      name: Yup.string().required(1),
+      name: Yup.string().required(),
       email: Yup.string()
         .email()
-        .required(2),
+        .required(),
       age: Yup.number()
         .integer()
-        .required(3),
-      weight: Yup.number().required(4),
-      height: Yup.number().required(5),
+        .required(),
+      weight: Yup.number().required(),
+      height: Yup.number().required(),
     });
 
     if (!(await schema.isValid(req.body))) {
