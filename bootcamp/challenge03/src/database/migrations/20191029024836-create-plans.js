@@ -11,12 +11,12 @@ module.exports = {
         type: Sequelize.STRING,
         allowNull: false,
       },
-      date: {
+      duration: {
         type: Sequelize.INTEGER,
         allowNull: false,
       },
       price: {
-        type: Sequelize.REAL(11, 2),
+        type: Sequelize.INTEGER,
         allowNull: false,
       },
       created_at: {

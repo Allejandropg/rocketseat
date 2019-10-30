@@ -5,8 +5,8 @@ class Plan extends Model {
     super.init(
       {
         title: Sequelize.STRING,
-        date: Sequelize.INTEGER,
-        price: Sequelize.REAL,
+        duration: Sequelize.INTEGER,
+        price: Sequelize.INTEGER,
       },
       {
         sequelize,

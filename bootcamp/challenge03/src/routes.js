@@ -23,6 +23,9 @@ routes.post('/students', authMiddleware, StudentController.store);
 routes.put('/students/:id', authMiddleware, StudentController.update);
 
 // Plans
-routes.post('/plans', PlanController.store);
+routes.get('/plans', PlanController.index); // List
+routes.post('/plans', PlanController.store); // Create
+routes.put('/plans/:id', PlanController.update); // Update
+routes.delete('/plans/:id', PlanController.delete); // Delete
 
 export default routes;
