@@ -2,25 +2,22 @@ import nodemailer from 'nodemailer';
 import { resolve } from 'path';
 import exphbs from 'express-handlebars';
 import nodemailerhbs from 'nodemailer-express-handlebars';
-import mailConfig from '../config/mail';
+import mailfConfig from '../config/mail';
 
 class Mail {
   constructor() {
-    const { host, port, secure, auth } = mailConfig;
-
+    const { host, port, secure, auth } = mailfConfig;
     this.transporter = nodemailer.createTransport({
       host,
       port,
       secure,
       auth: auth.user ? auth : null,
-    }); // Inicia a Configuração do envio de email
-
+    });
     this.configureTemplates();
   }
 
   configureTemplates() {
-    const viewPath = resolve(__dirname, '..', 'app', 'views', 'emails'); // configura pasta onde fica os views de envio de email
-
+    const viewPath = resolve(__dirname, '..', 'app', 'views', 'emails');
     this.transporter.use(
       'compile',
       nodemailerhbs({
@@ -38,7 +35,7 @@ class Mail {
 
   sendMail(message) {
     return this.transporter.sendMail({
-      ...mailConfig.default,
+      ...mailfConfig.default,
       ...message,
     });
   }

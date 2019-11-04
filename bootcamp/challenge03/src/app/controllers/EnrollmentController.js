@@ -4,6 +4,9 @@ import Enrollment from '../models/Enrollment';
 import Plan from '../models/Plan';
 import Student from '../models/Student';
 
+import EnrollmentMail from '../jobs/EnrollmentMail';
+import Queue from '../../lib/Queue';
+
 class EnrollmentController {
   async index(req, res) {
     const { page = 1 } = req.query;
@@ -38,15 +41,24 @@ class EnrollmentController {
         .required(),
       start_date: Yup.date().required(),
     });
-
+    /**
+     * Fields validation
+     */
     if (!(await schema.isValid(req.body))) {
       res.status(400).json({ error: 'Validate fails.' });
     }
+
+    /**
+     * Student Validation
+     */
     const { student_id } = req.body;
     const student = await Student.findByPk(student_id);
     if (!student) {
       res.status(400).json({ error: 'Plan not found.' });
     }
+    /**
+     * Plan Validation
+     */
     const { plan_id } = req.body;
     const plan = await Plan.findByPk(plan_id);
     if (!plan) {
@@ -69,6 +81,7 @@ class EnrollmentController {
       price: plan.price,
     });
 
+    Queue.add(EnrollmentMail.key, { student, plan, enrollment });
     return res.json(enrollment);
   }
 
