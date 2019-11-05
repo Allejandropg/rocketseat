@@ -7,7 +7,7 @@ class HelpOrders extends Model {
         student_id: Sequelize.INTEGER,
         question: Sequelize.STRING,
         answer: Sequelize.STRING,
-        endanswer_at_date: Sequelize.DATE,
+        answer_at: Sequelize.DATE,
       },
       {
         sequelize,
@@ -15,6 +15,10 @@ class HelpOrders extends Model {
     );
 
     return this;
+  }
+
+  static associate(models) {
+    this.belongsTo(models.Student, { foreignKey: 'student_id', as: 'student' });
   }
 }
 

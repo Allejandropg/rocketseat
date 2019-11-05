@@ -9,10 +9,11 @@ export default async (req, res, next) => {
     res.status(401).json({ error: 'User is not logged' });
   }
 
-  const [, token] = headertoken.split(' ');
+  const [barear, token] = headertoken.split(' ');
   try {
     const decoded = await promisify(jwt.verify)(token, authConfig.secret);
     req.userID = decoded.id;
+    req.barear = barear;
     return next();
   } catch (err) {
     return res.status(401).json({ error: 'Token invalid' });

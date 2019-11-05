@@ -5,8 +5,11 @@ import StudentController from './app/controllers/StudentController';
 import PlanController from './app/controllers/PlanController';
 import EnrollmentController from './app/controllers/EnrollmentController';
 import CheckinController from './app/controllers/CheckinController';
+import HelpOrdersController from './app/controllers/HelpOrdersController';
+import HelpStudentController from './app/controllers/HelpStudentController';
 
 import authMiddleware from './app/middlewares/auth';
+import studentMiddleware from './app/middlewares/student';
 
 const routes = new Router();
 
@@ -19,14 +22,38 @@ routes.post('/sessions', Sessioncontroller.store);
 // Authentication
 routes.use(authMiddleware);
 
+// Helpers Orders
+routes.get('/help-orders/:id', HelpOrdersController.index);
+routes.post('/help-orders/:id/answer', HelpOrdersController.store);
+
 // Students
 routes.get('/students', StudentController.index);
 routes.post('/students', StudentController.store);
 routes.put('/students/:id', StudentController.update);
 
 // Student checkin at academy
-routes.get('/students/:id/checkins', CheckinController.index);
-routes.post('/students/:id/checkins', CheckinController.store);
+routes.get(
+  '/students/:id/checkins',
+  studentMiddleware,
+  CheckinController.index
+);
+routes.post(
+  '/students/:id/checkins',
+  studentMiddleware,
+  CheckinController.store
+);
+
+// Studant Help Order
+routes.get(
+  '/students/:id/help-orders',
+  studentMiddleware,
+  HelpStudentController.index
+);
+routes.post(
+  '/students/:id/help-orders',
+  studentMiddleware,
+  HelpStudentController.store
+);
 
 // Plans
 routes.get('/plans', PlanController.index); // List
