@@ -11,8 +11,16 @@ class EnrollmentController {
   async index(req, res) {
     const { page = 1 } = req.query;
     const enrollments = await Enrollment.findAll({
+      where: { canceled_at: null },
       order: ['created_at'],
-      attributes: ['student_id', 'plan_id', 'start_date', 'end_date', 'price'],
+      attributes: [
+        'id',
+        'student_id',
+        'plan_id',
+        'start_date',
+        'end_date',
+        'price',
+      ],
       limit: 20,
       offset: (page - 1) * 20,
       include: [
@@ -69,7 +77,7 @@ class EnrollmentController {
     /**
      * Check past dates
      */
-    if (isBefore(start_date, new Date())) {
+    if (isBefore(parseISO(start_date), new Date())) {
       return res.status(400).json({ erro: 'Past dates are not permitted' });
     }
     const mounthEnd = addMonths(parseISO(start_date), plan.duration);
@@ -86,11 +94,47 @@ class EnrollmentController {
   }
 
   async update(req, res) {
-    return res.json();
+    const { id } = req.params;
+    const enrollmentExists = await Enrollment.findByPk(id);
+    if (!enrollmentExists) {
+      return res.status(400).json({ error: 'Invalid Enrollment' });
+    }
+    const schema = Yup.object().shape({
+      start_date: Yup.date().required(),
+    });
+    if (!(await schema.isValid(req.body))) {
+      return res.status(400).json({ error: 'Validate fails' });
+    }
+    /**
+     * Plan Validation
+     */
+    const plan = await Plan.findByPk(enrollmentExists.plan_id);
+
+    const { start_date } = req.body;
+    /**
+     * Check past dates
+     */
+    if (isBefore(parseISO(start_date), new Date())) {
+      return res.status(400).json({ erro: 'Past dates are not permitted' });
+    }
+    const mounthEnd = addMonths(parseISO(start_date), plan.duration);
+    await enrollmentExists.update({
+      start_date,
+      end_date: mounthEnd,
+    });
+    return res.json(enrollmentExists);
   }
 
   async delete(req, res) {
-    return res.json();
+    const { id } = req.params;
+    const enrollmentExists = await Enrollment.findByPk(id);
+    if (!enrollmentExists) {
+      return res.status(400).json({ error: 'Invalid Enrollment' });
+    }
+    // await enrollmentExists.destroy();
+    enrollmentExists.canceled_at = new Date();
+    await enrollmentExists.save();
+    return res.json(enrollmentExists);
   }
 }
 
