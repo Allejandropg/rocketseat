@@ -8,17 +8,18 @@ class EnrollmentMail {
   }
 
   async handle({ data }) {
-    const { student, helpOrder } = data;
+    const { student, plan, enrollment } = data;
     await Mail.sendMail({
       to: `${student.name} <${student.email}`,
       subject: 'Matricula Concluída',
       template: 'enrollment',
       context: {
         student: student.name,
-        helpOrder: helpOrder.question,
-        answer: helpOrder.answer,
-        answer_at: format(
-          parseISO(helpOrder.answer_at),
+        plan: plan.title,
+        duration: plan.duration,
+        price: plan.price,
+        start_date: format(
+          parseISO(enrollment.start_date),
           "'dia' dd 'de' MMMM'",
           {
             locale: pt,

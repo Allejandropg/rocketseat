@@ -1,3 +1,4 @@
+import * as Yup from 'yup';
 import HelpOrder from '../models/HelpOrder';
 import Student from '../models/Student';
 
@@ -12,7 +13,14 @@ class HelpOrderController {
     const enrollments = await HelpOrder.findAll({
       where: { answer: null },
       order: ['created_at'],
-      attributes: ['id', 'student_id', 'answer', 'answer', 'answer_at'],
+      attributes: [
+        'id',
+        'student_id',
+        'question',
+        'answer',
+        'answer',
+        'answer_at',
+      ],
       limit: 20,
       offset: (page - 1) * 20,
       include: [
@@ -27,7 +35,13 @@ class HelpOrderController {
   }
 
   async store(req, res) {
-    const { answer } = req.query;
+    const schema = Yup.object().shape({
+      answer: Yup.string().required(),
+    });
+    if (!(await schema.isValid(req.body))) {
+      return res.status(400).json({ error: 'Validate fails' });
+    }
+    const { answer } = req.body;
     const { id } = req.params;
     const helpOrder = await HelpOrder.findOne({ where: { id } });
     if (!helpOrder) {

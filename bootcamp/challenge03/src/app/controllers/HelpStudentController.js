@@ -1,14 +1,14 @@
+import * as Yup from 'yup';
 import HelpOrder from '../models/HelpOrder';
 import Student from '../models/Student';
 // Crie uma rota para a academia listar todos pedidos de auxílio sem resposta;
 class HelpOrderController {
   async index(req, res) {
-    const { page = 1, order = ' desc' } = req.query;
+    const { page = 1 } = req.query;
     const student_id = req.studentID;
 
     const enrollments = await HelpOrder.findAll({
       where: { student_id },
-      order: [`answer ${order}`],
       attributes: ['id', 'student_id', 'question', 'answer', 'answer_at'],
       limit: 20,
       offset: (page - 1) * 20,
@@ -24,7 +24,13 @@ class HelpOrderController {
   }
 
   async store(req, res) {
-    const { question } = req.query;
+    const schema = Yup.object().shape({
+      answer: Yup.strtring().required(),
+    });
+    if (!(await schema.isValid(req.body))) {
+      return res.status(400).json({ error: 'Validate fails' });
+    }
+    const { question } = req.body;
     const student_id = req.studentID;
     const helpOrder = await HelpOrder.create({ student_id, question });
     return res.json(helpOrder);

@@ -4,22 +4,21 @@ import Mail from '../../lib/Mail';
 
 class EnrollmentMail {
   get key() {
-    return 'EnrollmenteMail';
+    return 'HelpOrderMail';
   }
 
   async handle({ data }) {
-    const { student, plan, enrollment } = data;
+    const { student, helpOrder } = data;
     await Mail.sendMail({
       to: `${student.name} <${student.email}`,
-      subject: 'Matricula Concluída',
-      template: 'enrollment',
+      subject: 'Sua dúvida foi respondida',
+      template: 'helpOrder',
       context: {
         student: student.name,
-        plan: plan.title,
-        duration: plan.duration,
-        price: plan.price,
-        start_date: format(
-          parseISO(enrollment.start_date),
+        helpOrder: helpOrder.question,
+        answer: helpOrder.answer,
+        answer_at: format(
+          parseISO(helpOrder.answer_at),
           "'dia' dd 'de' MMMM'",
           {
             locale: pt,

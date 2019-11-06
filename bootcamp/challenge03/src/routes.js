@@ -16,21 +16,6 @@ const routes = new Router();
 // index
 routes.get('/', (req, res) => res.json({ success: 'Hello World' }));
 
-// Admin login
-routes.post('/sessions', Sessioncontroller.store);
-
-// Authentication
-routes.use(authMiddleware);
-
-// Helpers Orders
-routes.get('/help-orders/:id', HelpOrdersController.index);
-routes.post('/help-orders/:id/answer', HelpOrdersController.store);
-
-// Students
-routes.get('/students', StudentController.index);
-routes.post('/students', StudentController.store);
-routes.put('/students/:id', StudentController.update);
-
 // Student checkin at academy
 routes.get(
   '/students/:id/checkins',
@@ -54,6 +39,21 @@ routes.post(
   studentMiddleware,
   HelpStudentController.store
 );
+
+// Admin login
+routes.post('/sessions', Sessioncontroller.store);
+
+// Authentication
+routes.use(authMiddleware);
+
+// Helpers Orders
+routes.get('/help-orders/', HelpOrdersController.index);
+routes.post('/help-orders/:id/answer', HelpOrdersController.store);
+
+// Students
+routes.get('/students', StudentController.index);
+routes.post('/students', StudentController.store);
+routes.put('/students/:id', StudentController.update);
 
 // Plans
 routes.get('/plans', PlanController.index); // List
