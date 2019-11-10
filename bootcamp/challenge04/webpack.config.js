@@ -1,13 +1,13 @@
 const path = require('path');
 
 module.exports = {
-  entry: path.resolve(__dirname, 'src', 'index.js'), // de onde vai pegar o que vai compilar
+  entry: path.resolve(__dirname, 'src', 'index.js'),
   output: {
-    path: path.resolve(__dirname, 'public'), // onde vai ser compilado
-    filename: 'bundle.js' // nome do arquivo que vai ser compilado
+    path: path.resolve(__dirname, 'public'),
+    filename: 'bundle.js'
   },
   devServer: {
-    contentBase: path.resolve(__dirname,'public') // onde vai ser compilado
+    contentBase: path.resolve(__dirname,'public')
   },
   module: {
     rules:[
@@ -24,11 +24,11 @@ module.exports = {
           { loader: 'css-loader' }
         ]
       }, {
-        test: /\.*\.(gif|png|jpe?g)$/i,
+        test: /.*\.(gif|png|jpe?g)$/i,
         use: [
           { loader: 'file-loader' }
         ]
       }
     ]
   }
-};
+}

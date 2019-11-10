@@ -3,3 +3,44 @@ body {
   color:#FFF;
   font-family: Arial, Helvetica, sans-serif;
 }
+ul {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  margin-bottom: 10px;
+  border:1px solid #FFF;
+  width: -webkit-min-content;
+  width: -moz-min-content;
+  width: min-content;
+}
+li {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 10px;
+  line-height: 2em;
+  white-space: nowrap;
+}
+li + li {
+  border-top: 1px solid #FFF;
+}
+button {
+  margin-left: 4px;
+  border: 0;
+  background: rgba(90, 41, 252, 0.767);
+  color: #FFF;
+  padding: 10px;
+  border-radius: 6px;
+}
+input {
+  border-radius: 6px;
+  border:4px solid rgba(90, 41, 252, 0.767);
+  height: 20px;
+  padding: 6px 4px;
+  color: rgba(90, 41, 252, 0.767);
+  font-weight: bold;
+  box-shadow: 0px 0px 0px 1px #FFF;
+}
