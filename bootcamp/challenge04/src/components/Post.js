@@ -8,7 +8,7 @@ import Avatar from './Avatar';
 import Comment from './Comment';
 
 function Post({ post }) {
-  console.log('post',post)
+  // console.log('post',post)
   const { content, date } = post;
   const { avatar, name } = post.author;
   return (
