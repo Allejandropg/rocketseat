@@ -116,11 +116,12 @@ export const ButtonsNavigate = styled.div`
   }
 `;
 
-export const FilterList = styled.li`
+export const FilterList = styled.div`
   display: flex;
   align-items: center;
   justify-content: space-between;
-  padding: 0 30px;
+  padding: 0 15px;
+  margin-bottom: 30px;
   button {
     padding: 10px 20px;
     background: #7159c1;

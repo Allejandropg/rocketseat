@@ -89,7 +89,15 @@ export default class Repository extends Component {
   }
 
   render() {
-    const { repository, issues, loading, page, limit, filters, filter } = this.state;
+    const {
+      repository,
+      issues,
+      loading,
+      page,
+      limit,
+      filters,
+      filter,
+    } = this.state;
 
     if (loading) {
       return <Loading>Carregando</Loading>;
@@ -105,7 +113,9 @@ export default class Repository extends Component {
         </Owner>
         <IssueList>
           <FilterList status={filter}>
-            {issues.map(btn => (<button key={btn.value}>{btn.label}<button>))}
+            {filters.map((btn, key) => (
+              <button key={key}>{btn.label}</button>
+            ))}
           </FilterList>
           {issues.map(issue => (
             <li key={String(issue.id)}>
