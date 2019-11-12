@@ -1,3 +1,4 @@
+/* eslint-disable no-undef */
 import React, { Component } from 'react';
 import { FaGithubAlt, FaPlus, FaSpinner } from 'react-icons/fa';
 import { Link } from 'react-router-dom';
@@ -77,10 +78,10 @@ export default class Main extends Component {
           </SubmitButton>
         </Form>
         <List>
-          {repositories.map(respository => (
-            <li>
-              <span>{respository.name}</span>
-              <Link to={`/repository/${encodeURIComponent(respository.name)}`}>
+          {repositories.map(repository => (
+            <li key={repository.name}>
+              <span>{repository.name}</span>
+              <Link to={`/repository/${encodeURIComponent(repository.name)}`}>
                 Detalhes
               </Link>
             </li>

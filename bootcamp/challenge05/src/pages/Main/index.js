@@ -1,3 +1,5 @@
+/* eslint-disable no-throw-literal */
+/* eslint-disable no-undef */
 import React, { Component } from 'react';
 import { FaGithubAlt, FaPlus, FaSpinner } from 'react-icons/fa';
 import { Link } from 'react-router-dom';
@@ -11,6 +13,7 @@ export default class Main extends Component {
     newRepo: '',
     repositories: [],
     loading: false,
+    error: null,
   };
 
   // Carregar os dados do localstorage
@@ -31,36 +34,43 @@ export default class Main extends Component {
   }
 
   handleInputChange = e => {
-    this.setState({ newRepo: e.target.value });
+    this.setState({ newRepo: e.target.value, error: null });
   };
 
   handleSubmit = async e => {
     e.preventDefault();
-    this.setState({ loading: true });
-    const { newRepo, repositories } = this.state;
+    this.setState({ loading: true, error: true });
+    try {
+      const { newRepo, repositories } = this.state;
+      // validate if input is not null
+      if (newRepo === '') throw 'Você precisa indicar um repositório';
 
-    const response = await api.get(`repos/${newRepo}`);
+      // validate if not is cadastrado
+      const checkRepo = repositories.find(repo => repo.name === newRepo);
+      if (checkRepo) throw 'Repositório duplicado';
 
-    const data = {
-      name: response.data.full_name,
-    };
-
-    this.setState({
-      newRepo: '',
-      repositories: [...repositories, data],
-      loading: false,
-    });
+      const response = await api.get(`repos/${newRepo}`);
+      const data = { name: response.data.full_name };
+      this.setState({
+        newRepo: '',
+        repositories: [...repositories, data],
+      });
+    } catch (error) {
+      this.setState({ error });
+    } finally {
+      this.setState({ loading: false });
+    }
   };
 
   render() {
-    const { newRepo, repositories, loading } = this.state;
+    const { newRepo, repositories, loading, error } = this.state;
     return (
       <Container>
         <h1>
           <FaGithubAlt />
           Repositórios
         </h1>
-        <Form onSubmit={this.handleSubmit}>
+        <Form onSubmit={this.handleSubmit} error={error}>
           <input
             type="text"
             placeholder="Adicionar"
@@ -75,12 +85,13 @@ export default class Main extends Component {
               <FaPlus color="#FFF" />
             )}
           </SubmitButton>
+          {error ? <strong>{error}</strong> : null}
         </Form>
         <List>
-          {repositories.map(respository => (
-            <li>
-              <span>{respository.name}</span>
-              <Link to={`/repository/${encodeURIComponent(respository.name)}`}>
+          {repositories.map(repository => (
+            <li key={repository.name}>
+              <span>{repository.name}</span>
+              <Link to={`/repository/${encodeURIComponent(repository.name)}`}>
                 Detalhes
               </Link>
             </li>
