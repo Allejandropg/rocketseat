@@ -27,19 +27,19 @@ export default class Repository extends Component {
     repository: {},
     issues: [],
     loading: true,
-    page: 0,
+    page: 1,
     limit: -1,
     filters: [
       { value: 'all', label: 'Todas', status: true },
       { value: 'open', label: 'Abertas', status: false },
       { value: 'closed', label: 'Fechadas', status: false },
     ],
-    filter: 0,
+    filter: 'all',
   };
 
   async componentDidMount() {
     const { match } = this.props;
-    const { page, filters, filter } = this.state;
+    const { page, filter } = this.state;
     const perPage = 5;
     const repoName = decodeURIComponent(match.params.repository);
 
@@ -47,7 +47,7 @@ export default class Repository extends Component {
       api.get(`/repos/${repoName}`),
       api.get(`/repos/${repoName}/issues`, {
         params: {
-          state: filters[filter].value,
+          state: filter,
           per_page: perPage,
           page,
         },
@@ -64,14 +64,14 @@ export default class Repository extends Component {
 
   async ladingRepository() {
     const { match } = this.props;
-    const { page, filters, filter } = this.state;
+    const { page, filter } = this.state;
     const perPage = 5;
     const repoName = decodeURIComponent(match.params.repository);
 
     const [issues] = await Promise.all([
       api.get(`/repos/${repoName}/issues`, {
         params: {
-          state: filters[filter].value,
+          state: filter,
           per_page: perPage,
           page,
         },
@@ -85,6 +85,11 @@ export default class Repository extends Component {
   handlePaginationa(mov) {
     const { page } = this.state;
     this.setState({ page: page + mov });
+    this.ladingRepository();
+  }
+
+  handleFilter(filter) {
+    this.setState({ filter });
     this.ladingRepository();
   }
 
@@ -113,8 +118,14 @@ export default class Repository extends Component {
         </Owner>
         <IssueList>
           <FilterList status={filter}>
-            {filters.map((btn, key) => (
-              <button key={key}>{btn.label}</button>
+            {filters.map(btn => (
+              <button
+                type="button"
+                key={btn.value}
+                onClick={() => this.handleFilter(btn.value)}
+              >
+                {btn.label}
+              </button>
             ))}
           </FilterList>
           {issues.map(issue => (
