@@ -34,47 +34,53 @@ export default class User extends Component {
   state = {
     stars: [],
     loading: true,
+    loadMore: false,
     page: 1,
+    limit: 0,
   };
 
   async componentDidMount() {
     const { navigation } = this.props;
     const user = navigation.getParam('user');
-    const perPage = 8;
-    const { page } = this.state;
-
-    const response = await api.get(`/users/${user.login}/starred`, {
-      params: {
-        per_page: perPage,
-        page,
-      },
-    });
-    this.setState({ stars: response.data, loading: false, page: page + 1 });
+    const response = await api.get(`/users/${user.login}/starred`);
+    this.setState({ limit: Math.round(response.data.length / 10) });
+    this.loadStars();
   }
 
-  async loadMore() {
+  loadStars = async (page = 1) => {
     const { navigation } = this.props;
     const user = navigation.getParam('user');
-    const perPage = 8;
+    const { stars } = this.state;
 
-    const { page } = this.state;
     const response = await api.get(`/users/${user.login}/starred`, {
       params: {
-        per_page: perPage,
         page,
+        limit: 10,
       },
     });
-    console.tron.log(response.data);
     this.setState({
-      stars: [response.data],
+      stars: page >= 2 ? [...stars, ...response.data] : response.data,
+      page,
       loading: false,
-      page: page + 1,
+      loadMore: false,
     });
+  };
+
+  refreshList = () => {
+    this.setState({ loadMore: true, stars: [] }, this.load);
+  };
+
+  async loadMore() {
+    const { page, loadMore } = this.state;
+    if (loadMore) return;
+    const next = page + 1;
+    this.setState({ loadMore: true });
+    this.loadStars(next);
   }
 
   render() {
     const { navigation } = this.props;
-    const { stars, loading } = this.state;
+    const { stars, loading, loadMore, page, limit } = this.state;
     const user = navigation.getParam('user');
     return (
       <Container>
@@ -89,10 +95,12 @@ export default class User extends Component {
           </Loading>
         ) : (
           <Stars
+            onRefresh={page <= limit && this.refreshList}
+            refreshing={loadMore}
             onEndReachedThreshold={0.2} // Carrega mais itens quando chegar em 20% do fim
-            onEndReached={() => this.loadMore()} // Função que carrega mais itens
+            onEndReached={() => page <= limit && this.loadMore()} // Função que carrega mais itens
             data={stars}
-            keyExtrator={star => String(star.id)}
+            keyExtractor={star => String(star.id)}
             renderItem={({ item }) => (
               <Starred>
                 <OwnerAvatar source={{ uri: item.owner.avatar_url }} />
@@ -104,6 +112,7 @@ export default class User extends Component {
             )}
           />
         )}
+        {/* loadMore ? <ActivityIndicator color="#7159C1" size="small" /> : null */}
       </Container>
     );
   }
