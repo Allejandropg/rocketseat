@@ -67,7 +67,7 @@ export default class User extends Component {
   };
 
   refreshList = () => {
-    this.setState({ loadMore: true, stars: [] }, this.load);
+    this.setState({ loadMore: true, stars: [] }, this.loadStars);
   };
 
   async loadMore() {
