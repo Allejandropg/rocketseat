@@ -1,4 +1,5 @@
 import React from 'react';
+import { Link } from 'react-router-dom';
 import { Form, Input } from '@rocketseat/unform';
 import * as Yup from 'yup';
 
@@ -24,6 +25,7 @@ export default function SignUp() {
         <p>Entre com o e-mail que você usa no GoBarber.</p>
         <Input name="email" type="email" placeholder="Seu e-mail" />
         <button type="submit">Continuar</button>
+        <Link to="/">Voltar</Link>
       </Form>
     </>
   );
