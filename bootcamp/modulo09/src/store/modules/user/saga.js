@@ -1,7 +1,7 @@
 import { takeLatest, call, put, all } from 'redux-saga/effects';
 import { toast } from 'react-toastify';
 
-import api from 'axios';
+import api from '~/services/api';
 
 import { updateProfileSuccess, updateProfileFailure } from './actions';
 
@@ -11,11 +11,13 @@ export function* updateProfile({ payload }) {
 
     const profile = { name, email, ...(rest.OldPassword ? rest : {}) };
     const response = yield call(api.put, 'users', profile);
+    console.log('responseSagaUser', response);
 
     toast.success('Perfil atualizado com sucesso');
+
     yield put(updateProfileSuccess(response.data));
   } catch (err) {
-    toast.error('Erro ao atualizar perfil, confira seus dados');
+    toast.error(`Erro ao atualizar perfil, confira seus dados: ${err}`);
     yield put(updateProfileFailure());
   }
 }

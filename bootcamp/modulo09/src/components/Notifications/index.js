@@ -23,17 +23,20 @@ export default function Notifications() {
   );
   useEffect(() => {
     async function loadNotifications() {
-      const response = await api.get('notifciations');
+      const response = await api.get('notifications');
+      console.tron.log('loadNotifications', response);
       const data = response.data.map(notification => ({
         ...notification,
         timeDistance: formatDistance(
-          parseISO(notification.createAt),
+          parseISO(notification.createdAt),
           new Date(),
           { addSuffix: true, locale: pt }
         ),
       }));
       setNotifications(data);
     }
+    // console.tron.log('loadNotifications', '');
+
     loadNotifications();
   }, []);
 

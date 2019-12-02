@@ -5,16 +5,15 @@ export function updateProfileResquest(data) {
   };
 }
 
-export function updateProfileSuccess(data) {
+export function updateProfileSuccess(profile) {
   return {
     type: '@user/UPDATE_PROFILE_SUCCESS',
-    payload: { data },
+    payload: { profile },
   };
 }
 
-export function updateProfileFailure(data) {
+export function updateProfileFailure() {
   return {
     type: '@user/UPDATE_PROFILE_FAILURE',
-    payload: { data },
   };
 }
