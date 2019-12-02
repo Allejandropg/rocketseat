@@ -5,9 +5,10 @@ import Appointment from '../models/Appointment';
 import User from '../models/User';
 import File from '../models/File';
 import Notification from '../schemas/Notification';
-import CancellationMail from '../jobs/CancellationMail';
+// import CancellationMail from '../jobs/CancellationMail';
+import Mail from '../../lib/Mail';
 
-import Qeue from '../../lib/Qeue';
+// import Qeue from '../../lib/Qeue';
 
 class AppointmentController {
   async index(req, res) {
@@ -144,7 +145,25 @@ class AppointmentController {
     appointment.canceled_at = new Date();
     await appointment.save();
 
-    await Qeue.add(CancellationMail.key, { appointment });
+    // FIXME envio de cancelamento
+    // await Qeue.add(CancellationMail.key, { appointment });
+
+    await Mail.sendMail({
+      to: `${appointment.provider.name} <${appointment.provider.email}`,
+      subject: 'Agendamento cancelado',
+      template: 'cancellation',
+      context: {
+        provider: appointment.provider.name,
+        user: appointment.user.name,
+        date: format(
+          parseISO(appointment.date),
+          "'dia' dd 'de' MMMM', às' H:mm'h'",
+          {
+            locale: pt,
+          }
+        ),
+      },
+    });
 
     return res.json(appointment);
   }
