@@ -5,21 +5,22 @@ import api from '~/services/api';
 import { Container } from './styles';
 
 export default function AvatarInput() {
-  const { defaultValue, registerFiled } = useField('avatar');
+  const { defaultValue, registerField } = useField('avatar');
 
   const [file, setFile] = useState(defaultValue && defaultValue.id);
   const [preview, setPreview] = useState(defaultValue && defaultValue.url);
 
   const ref = useRef();
+
   useEffect(() => {
     if (ref.current) {
-      registerFiled({
+      registerField({
         name: 'avatar_id',
         ref: ref.current,
         path: 'dataset.file',
       });
     }
-  }, [ref, registerFiled]);
+  }, [ref.current]);// eslint-disable-line
 
   async function handleChange(e) {
     const data = new FormData();
@@ -29,6 +30,7 @@ export default function AvatarInput() {
 
     const { id, url } = response.data;
 
+    console.tron.log('responseSagaUser', response);
     setFile(id);
     setPreview(url);
   }
