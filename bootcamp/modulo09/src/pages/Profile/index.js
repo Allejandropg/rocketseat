@@ -34,11 +34,11 @@ export default function Profile() {
           type="password"
           placeholder="Sua senha atual"
         />
-        <Input name="password" type="password" placeholder="Sua senha atual" />
+        <Input name="password" type="password" placeholder="Nova senha" />
         <Input
           name="confirmPassword"
           type="Password"
-          placeholder="Confirm sua senha"
+          placeholder="Confirmação de senha"
         />
 
         <button type="submit">Atualizar perfil</button>

@@ -40,6 +40,6 @@ routes.get('/notifications', NotificationController.index);
 routes.put('/notifications/:id', NotificationController.update);
 
 // files
-routes.post('/files', upload.single('file'), FileController.store);
+routes.post('/files/', upload.single('file'), FileController.store);
 
 export default routes;
