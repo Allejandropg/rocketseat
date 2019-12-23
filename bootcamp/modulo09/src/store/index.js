@@ -15,7 +15,6 @@ const sagaMonitor =
 const sagaMiddleware = createSagaMiddleware({ sagaMonitor });
 
 const middlewares = [sagaMiddleware];
-
 const store = createStore(persistReducers(rootReducer), middlewares);
 const persistor = persistStore(store);
 
