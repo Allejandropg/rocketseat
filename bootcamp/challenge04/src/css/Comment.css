@@ -1,0 +1,14 @@
+.comment {
+  display: flex;
+  align-items: flex-start;
+  margin-bottom: 10px;
+}
+.infos-comment {
+  background: #EEEEEE;
+  border-radius: 20px;
+  padding: 10px 15px;
+  width: calc(100% - 38px);
+}
+.author-comment {
+  margin-right: 4px;
+}

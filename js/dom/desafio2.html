@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<meta http-equiv="X-UA-Compatible" content="ie=edge">
+	<title>Desafio 2 - DOM</title>
+</head>
+
+<body>
+	<div id="app">
+	</div>
+	<script>
+		const container = document.getElementById('app');
+		const button = document.createElement('button');
+		const texto = document.createTextNode('Clique aqui')
+		button.appendChild(texto);
+		container.appendChild(button)
+
+		button.onclick = () => {
+			const bgRed = '#F00';
+			const div = document.createElement('div');
+            var newColor = getRandomColor();
+			div.style.display = 'inline-block';
+			div.style.width = '100px';
+			div.style.height = '100px';
+			div.style.marginLeft = '4px';
+			div.style.marginBottom = '4px';
+            div.style.backgroundColor = bgRed;
+            div.onmouseover = () => {
+				div.style.backgroundColor = newColor
+            }
+            div.onmouseleave = () => {
+                div.style.backgroundColor = bgRed
+            }
+			container.appendChild(div);
+        }
+        function getRandomColor() {  
+            var letters = "0123456789ABCDEF";  
+            var color = "#";  
+            for (var i = 0; i < 6; i++) {    
+                color += letters[Math.floor(Math.random() * 16)];  
+            }  
+            return color;
+        }
+	</script>
+</body>
+
+</html>

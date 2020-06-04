@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Desafio 5</title>
+</head>
+
+<body>
+    <script>
+        function mostrarLinhas(usuarios) {
+            for (const obj of usuarios) {
+                console.log(`O(A) ${obj.nome} possui as habilidades: ${obj.habilidades.join(', ')}.`)
+            }
+        }
+        var usuarios = [{ nome: "Diego", habilidades: ["Javascript", "ReactJS", "Redux"] }, { nome: "Gabriel", habilidades: ["VueJS", "Ruby on Rails", "Elixir"] }];
+        mostrarLinhas(usuarios)
+    </script>
+</body>
+
+</html>

@@ -1,0 +1,37 @@
+* {
+  margin:0;
+  padding:0;
+  outline: 0;
+  box-sizing: border-box;
+  max-width: 100%;
+}
+
+body {
+  background: #7159CB;
+  font: 14px sans-serif;
+  color: #FFF;
+  max-width: 1160px;
+  padding: 0 15px;
+}
+
+h1 { text-align: center; margin-bottom: 30px;}
+
+img {
+  display: block;
+  width: 80%;
+  margin: 0 auto 20px;
+}
+ul {
+ list-style: none;
+ font-size: 18px;
+}
+
+li{ margin-bottom: 6px; }
+
+button {
+  padding: 4px 15px;
+  background: none;
+  border: 1px solid #FFF;
+  color: #FFF;
+  font-weight: bold;
+}

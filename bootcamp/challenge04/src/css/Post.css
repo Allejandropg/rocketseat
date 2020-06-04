@@ -1,0 +1,31 @@
+.post {
+  background-color:#ffffff;
+  border-radius: 4px;
+  padding: 20px;
+  box-shadow: 0px 0px 4px 1px rgba(0,0,0,.2);
+  margin-bottom: 20px;
+}
+
+.infos {
+  display: flex;
+  align-items: flex-start;
+  line-height: 1.25em;
+  margin-bottom: 26px;
+}
+.name-author b{
+  display: block;
+}
+
+.post-date {
+  font-size: 0.688em;
+  color:#9A9A9A;
+}
+.content {
+  font-size: 0.875em;
+}
+
+hr {
+  border:0;
+  border-top: 1px solid #EEEEEE;
+  margin: 26px 0;
+}
